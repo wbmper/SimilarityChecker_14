@@ -5,8 +5,6 @@ using std::string;
 class SimilarityFixture : public testing::Test {
 private:
 	similarityChecker sc;
-	std::string str1;
-	std::string str2;
 public:
 	void updateScore(const std::string& str1, const std::string & str2) {
 		sc.updateLengthScore(str1, str2);
