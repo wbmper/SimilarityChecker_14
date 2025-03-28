@@ -22,8 +22,8 @@ public:
 	{
 		int str1Size = static_cast<int>(str1.size());
 		int str2Size = static_cast<int>(str2.size());
-		int gap = (str1Size > str2Size) ? (str1Size - str2Size) : (str2Size - str1Size);
-		int smallSize = (str1Size > str2Size) ? str2Size : str1Size;
+		int gap = std::abs(str1Size - str2Size);
+		int smallSize = std::min(str1Size, str2Size);
 
 		return 60 - gap * 60 / smallSize;
 	}
