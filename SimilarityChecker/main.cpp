@@ -8,6 +8,7 @@ private:
 public:
 	void updateScore(const std::string& str1, const std::string & str2) {
 		sc.updateLengthScore(str1, str2);
+		sc.updateAlphaScore(str1, str2);
 	}
 
 	void checkScore(int expected) {
@@ -15,24 +16,24 @@ public:
 	}
 };
 
-TEST_F(SimilarityFixture, SameLength) {
+TEST_F(SimilarityFixture, LengthSameAlphaSame) {
 	updateScore("ASD", "DSA");
-	checkScore(60);
+	checkScore(100);
 }
 
-TEST_F(SimilarityFixture, LengthDifferenceOver2Times) {
+TEST_F(SimilarityFixture, LengthDifferenceOver2TimesAlphaTotallyDifferent) {
 	updateScore("A", "BB");
 	checkScore(0);
 }
 
-TEST_F(SimilarityFixture, LengthPartialPoint1) {
+TEST_F(SimilarityFixture, LengthPartialPoint1Alpha3Same) {
 	updateScore("AAABB", "BAA");
-	checkScore(20);
+	checkScore(60); // 20 + 40
 }
 
-TEST_F(SimilarityFixture, LengthPartialPoint2) {
+TEST_F(SimilarityFixture, LengthPartialPoint2Alpha1Same) {
 	updateScore("AA", "AAE");
-	checkScore(30);
+	checkScore(50); // 30 + 20
 }
 
 int main() {
