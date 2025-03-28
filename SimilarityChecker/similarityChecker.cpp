@@ -1,32 +1,41 @@
 #include <string>
 #include <iostream>
-using std::string;
 
 class similarityChecker {
 private:
 	int score = 0;
 public:
-	void updateLengthScore(const string& str1, const string& str2) {
-		if (str1.size() == str2.size()) {
-			score = 60;
+	void updateLengthScore(const std::string& str1, const std::string& str2) {
+		if (isDifference2TimesOver(str1, str2)) {
+			return;
 		}
-		else if (str1.size() >= 2 * str2.size() || str1.size() * 2 <= str2.size()) {
-			score = 0;
+
+		if (isSameSize(str1, str2)) {
+			score += 60;
+			return;
 		}
-		else
-		{
-			size_t gap = str1.size() - str2.size();
-			if (str1.size() > str2.size()) {
-				double ratio = 1.0 - static_cast<double>(gap) / str2.size();
-				score = static_cast<int>(ratio * 60);
-			}
-			else
-			{
-				gap *= (-1);
-				double ratio = 1.0 - static_cast<double>(gap) / str1.size();
-				score = static_cast<int>(ratio * 60);
-			}
-		}
+
+		score += getPartialPoint(str1, str2);
+	}
+
+	int getPartialPoint(const std::string& str1, const std::string& str2)
+	{
+		int str1Size = static_cast<int>(str1.size());
+		int str2Size = static_cast<int>(str2.size());
+		int gap = (str1Size > str2Size) ? (str1Size - str2Size) : (str2Size - str1Size);
+		int smallSize = (str1Size > str2Size) ? str2Size : str1Size;
+
+		return 60 - gap * 60 / smallSize;
+	}
+
+	bool isDifference2TimesOver(const std::string& str1, const std::string& str2) const
+	{
+		return str1.size() >= 2 * str2.size() || str1.size() * 2 <= str2.size();
+	}
+
+	bool isSameSize(const std::string& str1, const std::string& str2) const
+	{
+		return str1.size() == str2.size();
 	}
 
 	int getScore() const {

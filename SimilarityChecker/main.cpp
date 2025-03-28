@@ -1,28 +1,40 @@
 #include "gmock/gmock.h"
 #include "similaritychecker.cpp"
+using std::string;
 
-TEST(CharacterSimilarity, SameLength) {
-	string str1 = "ASD";
-	string str2 = "DSA";
+class SimilarityFixture : public testing::Test {
+private:
 	similarityChecker sc;
-	sc.updateLengthScore(str1, str2);
-	EXPECT_EQ(60, sc.getScore());
+	std::string str1;
+	std::string str2;
+public:
+	void updateScore(const std::string& str1, const std::string & str2) {
+		sc.updateLengthScore(str1, str2);
+	}
+
+	void checkScore(int expected) {
+		EXPECT_EQ(expected, sc.getScore());
+	}
+};
+
+TEST_F(SimilarityFixture, SameLength) {
+	updateScore("ASD", "DSA");
+	checkScore(60);
 }
 
-TEST(CharacterSimilarity, LengthDifferenceOver2Times) {
-	string str1 = "A";
-	string str2 = "BB";
-	similarityChecker sc;
-	sc.updateLengthScore(str1, str2);
-	EXPECT_EQ(0, sc.getScore());
+TEST_F(SimilarityFixture, LengthDifferenceOver2Times) {
+	updateScore("A", "BB");
+	checkScore(0);
 }
 
-TEST(CharacterSimilarity, LengthPartialPoint) {
-	string str1 = "AAABB";
-	string str2 = "BAA";
-	similarityChecker sc;
-	sc.updateLengthScore(str1, str2);
-	EXPECT_EQ(20, sc.getScore());
+TEST_F(SimilarityFixture, LengthPartialPoint1) {
+	updateScore("AAABB", "BAA");
+	checkScore(20);
+}
+
+TEST_F(SimilarityFixture, LengthPartialPoint2) {
+	updateScore("AA", "AAE");
+	checkScore(30);
 }
 
 int main() {
